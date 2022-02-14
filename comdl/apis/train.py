@@ -144,7 +144,7 @@ class MMDetTrainer(BaseTrainer):
         bests = sorted(bests, key = lambda x:int(x.split("epoch_")[-1].replace(".pth", "")))
         data = torch.load(os.path.join(self.cfg.work_dir, bests[-1]), map_location=torch.device("cpu"))
         data['custom_data'] = self.custom_data
-        torch.save(os.path.join(self.cfg.work_dir, "best_model.pt"))
+        torch.save(os.path.join(self.cfg.work_dir, "best_model.pt"), data)
 
 
 
