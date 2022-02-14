@@ -71,7 +71,7 @@ class MMDetTrainer(BaseTrainer):
                  class_agnostic = True, custom_data = {}):
         super().__init__(nc, base_config, work_dir, batch_size, workers, data_root, seed,gpu_ids, load_from, save_best_on, eval_interval, epochs, custom_data)
 
-        self.cfg.dump(os.path.join(self.cfg.work_dir, os.path.basename(base_config)))
+        #self.cfg.dump(os.path.join(self.cfg.work_dir, os.path.basename(base_config)))
 
 
         classes = tuple([str(i) for i in range(nc)]) if classes is None else classes
@@ -126,16 +126,21 @@ class MMDetTrainer(BaseTrainer):
         self.model = build_detector(self.cfg.model,
                                     train_cfg=self.cfg.get("train_cfg"),
                                     test_cfg=self.cfg.get('test_cfg'))
-        self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
+        #self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
         self.model.init_weights()
         datasets = [build_dataset(self.cfg.data.train)]
         train_detector(self.model, datasets[0], self.cfg, distributed=False, validate=validate)
 
         #find best_checkpoint
         bests = []
-        for file in os.listdir(self.cfg.work_dir):
-            if("best" in file):
-                bests.append(file)
+        if self.cfg.work_dir == "":
+            for file in os.listdir():
+                if("best" in file):
+                    bests.append(file)
+        else:
+            for file in os.listdir(self.cfg.work_dir):
+                if("best" in file):
+                    bests.append(file)
         bests = sorted(bests, key = lambda x:int(x.split("epoch_")[-1].replace(".pth", "")))
         data = torch.load(bests[-1], map_location=torch.device("cpu"))
         data['custom_data'] = self.custom_data
