@@ -119,7 +119,12 @@ class MMDetTrainer(BaseTrainer):
                   ("classes", classes, "")])
 
         # change_key(self.cfg.model.train_cfg, "nms_pre", rpn_max_per_image + 1000)
-
+        self.cfg.lr_config = dict(
+        policy='step',
+        warmup='linear',
+        warmup_iters=500,
+        warmup_ratio=0.001,
+        step=[8, 11])
     
 
     def train(self, validate = True):
