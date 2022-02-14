@@ -142,7 +142,7 @@ class MMDetTrainer(BaseTrainer):
                 if("best" in file):
                     bests.append(file)
         bests = sorted(bests, key = lambda x:int(x.split("epoch_")[-1].replace(".pth", "")))
-        data = torch.load(bests[-1], map_location=torch.device("cpu"))
+        data = torch.load(os.path.join(self.cfg.work_dir, bests[-1]), map_location=torch.device("cpu"))
         data['custom_data'] = self.custom_data
         torch.save(os.path.join(self.cfg.work_dir, "best_model.pt"))
 
