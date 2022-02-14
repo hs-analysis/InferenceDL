@@ -194,7 +194,7 @@ model = dict(
             max_per_img=100,
             mask_thr_binary=0.5)))
 dataset_type = 'CocoDataset'
-data_root = 'F:\source\repos\YOLOX\datasets\her2'
+data_root = 'F:\source\repos\InferenceDL'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -231,7 +231,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=2,
+    samples_per_gpu=1,
     workers_per_gpu=0,
     train=dict(
         type='CocoDataset',
@@ -322,6 +322,6 @@ resume_from = None
 workflow = [('train', 1)]
 seed = 1234
 gpu_ids = [0]
-work_dir = ''
+work_dir = 'F:\source\repos\InferenceDL'
 max_epochs = 20
 total_epochs = 20

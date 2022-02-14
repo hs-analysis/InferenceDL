@@ -126,7 +126,7 @@ class MMDetTrainer(BaseTrainer):
         self.model = build_detector(self.cfg.model,
                                     train_cfg=self.cfg.get("train_cfg"),
                                     test_cfg=self.cfg.get('test_cfg'))
-        #self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
+        self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
         self.model.init_weights()
         datasets = [build_dataset(self.cfg.data.train)]
         train_detector(self.model, datasets[0], self.cfg, distributed=False, validate=validate)
