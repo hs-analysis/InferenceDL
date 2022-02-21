@@ -117,7 +117,7 @@ class MMDetTrainer(BaseTrainer):
                   ("max_per_img", rpn_max_per_image, "nms_pre"),
                   ("nms_pre", rpn_max_per_image, ""),
                   ("classes", classes, "")])
-
+        self.cfg.checkpoint_config = {'interval': 999999}
         # change_key(self.cfg.model.train_cfg, "nms_pre", rpn_max_per_image + 1000)
         self.cfg.lr_config = dict(
         policy='step',

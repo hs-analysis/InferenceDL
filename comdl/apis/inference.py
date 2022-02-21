@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from mmdet.apis.inference import init_detector, inference_detector
 #TODO: from mmseg.apis.inference import ...
 
@@ -15,6 +16,10 @@ class InferenceModel:
             cfg_options ([type], optional): [description]. Defaults to None.
         """
         #TODO: Implement mmseg init
+        self.state = {}
+        tmp = torch.load(checkpoint, map_location=torch.device("cpu"))
+        if "custom_data" in tmp:
+            self.state['custom_data'] = tmp['custom_data']
         self.model = init_detector(config, checkpoint, device, cfg_options)
 
 
