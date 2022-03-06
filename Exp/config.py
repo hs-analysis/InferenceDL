@@ -120,7 +120,7 @@ lr_config = dict(
     warmup_ratio=0.001,
     step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=40)
-checkpoint_config = dict(interval=1)
+checkpoint_config = dict(interval=999999)
 log_config = dict(interval=1, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
@@ -330,7 +330,7 @@ model = dict(
         ],
         test_cfg=dict(
             score_thr=0.001,
-            nms=dict(type='nms', iou_threshold=0.5, class_agnostic=True),
+            nms=dict(type='nms', iou_threshold=0.5),
             max_per_img=100,
             mask_thr_binary=0.5),
         pretrained=None),
@@ -414,7 +414,7 @@ model = dict(
             min_bbox_size=0),
         rcnn=dict(
             score_thr=0.001,
-            nms=dict(type='nms', iou_threshold=0.5, class_agnostic=True),
+            nms=dict(type='nms', iou_threshold=0.5),
             max_per_img=100,
             mask_thr_binary=0.5)))
 seed = 1234
