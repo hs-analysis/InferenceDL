@@ -168,7 +168,6 @@ class MMSegTrainer(BaseTrainer):
         data = torch.load(os.path.join(self.cfg.work_dir, bests[-1]), map_location=torch.device("cpu"))
         data['custom_data'] = self.custom_data
         torch.save(data, os.path.join(self.cfg.work_dir, "best_model.pt"))
-        sys.stderr = _err
 
 
 class MMDetTrainer(BaseTrainer):
@@ -264,7 +263,6 @@ class MMDetTrainer(BaseTrainer):
         data = torch.load(os.path.join(self.cfg.work_dir, bests[-1]), map_location=torch.device("cpu"))
         data['custom_data'] = self.custom_data
         torch.save(data, os.path.join(self.cfg.work_dir, "best_model.pt"))
-        sys.stderr = _err
 
 
 
