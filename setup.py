@@ -7,7 +7,7 @@ setup(
   name = 'comdl',
   packages = find_packages(),
   version = '0.0.1',
-  install_requires=[],
+  install_requires=['mmsegmentation'],
   license='MIT',
   description = 'ComDL - pytorch',
   author = 'Philipp Marquardt',
