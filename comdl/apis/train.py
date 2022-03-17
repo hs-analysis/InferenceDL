@@ -149,9 +149,9 @@ class MMSegTrainer(BaseTrainer):
         self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
         self.model.init_weights()
         datasets = [build_dataset(self.cfg.data.train)]
-        _err = sys.stderr
-        _std = sys.stdout
-        sys.stderr = _std
+        #_err = sys.stderr
+        #_std = sys.stdout
+        #sys.stderr = _std
         train_detector(self.model, datasets[0], self.cfg, distributed=False, validate=validate)
 
         #find best_checkpoint
@@ -244,9 +244,9 @@ class MMDetTrainer(BaseTrainer):
         self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
         self.model.init_weights()
         datasets = [build_dataset(self.cfg.data.train)]
-        _err = sys.stderr
-        _std = sys.stdout
-        sys.stderr = _std
+        #_err = sys.stderr
+        #_std = sys.stdout
+        #sys.stderr = _std
         train_detector(self.model, datasets[0], self.cfg, distributed=False, validate=validate)
 
         #find best_checkpoint
