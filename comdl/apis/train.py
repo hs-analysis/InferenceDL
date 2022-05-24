@@ -149,9 +149,9 @@ class MMSegTrainer(BaseTrainer):
         self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
         self.model.init_weights()
         datasets = [build_dataset(self.cfg.data.train)]
-        _err = sys.stderr
-        _std = sys.stdout
-        sys.stderr = _std
+        #_err = sys.stderr
+        #_std = sys.stdout
+        #sys.stderr = _std
         train_detector(self.model, datasets[0], self.cfg, distributed=False, validate=validate)
 
         #find best_checkpoint
@@ -168,7 +168,6 @@ class MMSegTrainer(BaseTrainer):
         data = torch.load(os.path.join(self.cfg.work_dir, bests[-1]), map_location=torch.device("cpu"))
         data['custom_data'] = self.custom_data
         torch.save(data, os.path.join(self.cfg.work_dir, "best_model.pt"))
-        sys.stderr = _err
 
 
 class MMDetTrainer(BaseTrainer):
@@ -246,9 +245,9 @@ class MMDetTrainer(BaseTrainer):
         self.cfg.dump(os.path.join(self.cfg.work_dir, "config.py"))
         self.model.init_weights()
         datasets = [build_dataset(self.cfg.data.train)]
-        _err = sys.stderr
-        _std = sys.stdout
-        sys.stderr = _std
+        #_err = sys.stderr
+        #_std = sys.stdout
+        #sys.stderr = _std
         train_detector(self.model, datasets[0], self.cfg, distributed=False, validate=validate)
 
         #find best_checkpoint
@@ -265,7 +264,6 @@ class MMDetTrainer(BaseTrainer):
         data = torch.load(os.path.join(self.cfg.work_dir, bests[-1]), map_location=torch.device("cpu"))
         data['custom_data'] = self.custom_data
         torch.save(data, os.path.join(self.cfg.work_dir, "best_model.pt"))
-        sys.stderr = _err
 
 
 
