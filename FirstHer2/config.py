@@ -1,29 +1,18 @@
 model = dict(
     type='MaskRCNN',
     backbone=dict(
-        type='SwinTransformer',
-        embed_dims=96,
-        depths=[2, 2, 6, 2],
-        num_heads=[3, 6, 12, 24],
-        window_size=7,
-        mlp_ratio=4,
-        qkv_bias=True,
-        qk_scale=None,
-        drop_rate=0.0,
-        attn_drop_rate=0.0,
-        drop_path_rate=0.2,
-        patch_norm=True,
+        type='ResNet',
+        depth=50,
+        num_stages=4,
         out_indices=(0, 1, 2, 3),
-        with_cp=False,
-        convert_weights=True,
-        init_cfg=dict(
-            type='Pretrained',
-            checkpoint=
-            'https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth'
-        )),
+        frozen_stages=1,
+        norm_cfg=dict(type='BN', requires_grad=True),
+        norm_eval=True,
+        style='pytorch',
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
     neck=dict(
         type='FPN',
-        in_channels=[96, 192, 384, 768],
+        in_channels=[256, 512, 1024, 2048],
         out_channels=256,
         num_outs=5),
     rpn_head=dict(
@@ -54,7 +43,7 @@ model = dict(
             in_channels=256,
             fc_out_channels=1024,
             roi_feat_size=7,
-            num_classes=1,
+            num_classes=4,
             bbox_coder=dict(
                 type='DeltaXYWHBBoxCoder',
                 target_means=[0.0, 0.0, 0.0, 0.0],
@@ -73,7 +62,7 @@ model = dict(
             num_convs=4,
             in_channels=256,
             conv_out_channels=256,
-            num_classes=1,
+            num_classes=4,
             loss_mask=dict(
                 type='CrossEntropyLoss', use_mask=True, loss_weight=1.0)),
         train_cfg=dict(
@@ -96,7 +85,7 @@ model = dict(
         test_cfg=dict(
             score_thr=0.05,
             nms=dict(type='nms', iou_threshold=0.5),
-            max_per_img=800,
+            max_per_img=400,
             mask_thr_binary=0.5),
         pretrained=None),
     train_cfg=dict(
@@ -148,53 +137,17 @@ model = dict(
         rcnn=dict(
             score_thr=0.05,
             nms=dict(type='nms', iou_threshold=0.5),
-            max_per_img=800,
+            max_per_img=400,
             mask_thr_binary=0.5)))
 dataset_type = 'CocoDataset'
-data_root = 'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset'
+data_root = 'D:\Hsa\temp\projects\5f5267db-abac-4755-b8a7-a9c73b2d9dee\dataset\root'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+    dict(type='Resize', img_scale=(800, 1333), keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
-    dict(
-        type='AutoAugment',
-        policies=[[{
-            'type':
-            'Resize',
-            'img_scale': [(480, 1333), (512, 1333), (544, 1333), (576, 1333),
-                          (608, 1333), (640, 1333), (672, 1333), (704, 1333),
-                          (736, 1333), (768, 1333), (800, 1333)],
-            'multiscale_mode':
-            'value',
-            'keep_ratio':
-            True
-        }],
-                  [{
-                      'type': 'Resize',
-                      'img_scale': [(400, 1333), (500, 1333), (600, 1333)],
-                      'multiscale_mode': 'value',
-                      'keep_ratio': True
-                  }, {
-                      'type': 'RandomCrop',
-                      'crop_type': 'absolute_range',
-                      'crop_size': (384, 600),
-                      'allow_negative_crop': True
-                  }, {
-                      'type':
-                      'Resize',
-                      'img_scale': [(480, 1333), (512, 1333), (544, 1333),
-                                    (576, 1333), (608, 1333), (640, 1333),
-                                    (672, 1333), (704, 1333), (736, 1333),
-                                    (768, 1333), (800, 1333)],
-                      'multiscale_mode':
-                      'value',
-                      'override':
-                      True,
-                      'keep_ratio':
-                      True
-                  }]]),
     dict(
         type='Normalize',
         mean=[123.675, 116.28, 103.53],
@@ -229,55 +182,15 @@ data = dict(
     train=dict(
         type='CocoDataset',
         ann_file=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\annotations/instances_train2017.json',
+        'D:\Hsa\temp\projects\5f5267db-abac-4755-b8a7-a9c73b2d9dee\dataset\root\annotations/instances_train2017.json',
         img_prefix=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\train2017/',
-        classes=('0', ),
+        'D:\Hsa\temp\projects\5f5267db-abac-4755-b8a7-a9c73b2d9dee\dataset\root\train2017/',
+        classes=('0', '1', '2', '3'),
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+            dict(type='Resize', img_scale=(800, 1333), keep_ratio=True),
             dict(type='RandomFlip', flip_ratio=0.5),
-            dict(
-                type='AutoAugment',
-                policies=[[{
-                    'type':
-                    'Resize',
-                    'img_scale': [(480, 1333), (512, 1333), (544, 1333),
-                                  (576, 1333), (608, 1333), (640, 1333),
-                                  (672, 1333), (704, 1333), (736, 1333),
-                                  (768, 1333), (800, 1333)],
-                    'multiscale_mode':
-                    'value',
-                    'keep_ratio':
-                    True
-                }],
-                          [{
-                              'type': 'Resize',
-                              'img_scale': [(400, 1333), (500, 1333),
-                                            (600, 1333)],
-                              'multiscale_mode': 'value',
-                              'keep_ratio': True
-                          }, {
-                              'type': 'RandomCrop',
-                              'crop_type': 'absolute_range',
-                              'crop_size': (384, 600),
-                              'allow_negative_crop': True
-                          }, {
-                              'type':
-                              'Resize',
-                              'img_scale': [(480, 1333), (512, 1333),
-                                            (544, 1333), (576, 1333),
-                                            (608, 1333), (640, 1333),
-                                            (672, 1333), (704, 1333),
-                                            (736, 1333), (768, 1333),
-                                            (800, 1333)],
-                              'multiscale_mode':
-                              'value',
-                              'override':
-                              True,
-                              'keep_ratio':
-                              True
-                          }]]),
             dict(
                 type='Normalize',
                 mean=[123.675, 116.28, 103.53],
@@ -292,10 +205,10 @@ data = dict(
     val=dict(
         type='CocoDataset',
         ann_file=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\annotations/instances_val2017.json',
+        'D:\Hsa\temp\projects\5f5267db-abac-4755-b8a7-a9c73b2d9dee\dataset\root\annotations/instances_val2017.json',
         img_prefix=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\val2017/',
-        classes=('0', ),
+        'D:\Hsa\temp\projects\5f5267db-abac-4755-b8a7-a9c73b2d9dee\dataset\root\val2017/',
+        classes=('0', '1', '2', '3'),
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(
@@ -318,10 +231,10 @@ data = dict(
     test=dict(
         type='CocoDataset',
         ann_file=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\annotations/instances_val2017.json',
+        'D:\Hsa\temp\projects\5f5267db-abac-4755-b8a7-a9c73b2d9dee\dataset\root\annotations/instances_val2017.json',
         img_prefix=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\val2017/',
-        classes=('0', ),
+        'D:\Hsa\temp\projects\5f5267db-abac-4755-b8a7-a9c73b2d9dee\dataset\root\val2017/',
+        classes=('0', '1', '2', '3'),
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(
@@ -342,39 +255,29 @@ data = dict(
                 ])
         ]))
 evaluation = dict(metric=['bbox', 'segm'], interval=1, save_best='bbox_mAP')
-optimizer = dict(
-    type='AdamW',
-    lr=0.0001,
-    betas=(0.9, 0.999),
-    weight_decay=0.05,
-    paramwise_cfg=dict(
-        custom_keys=dict(
-            absolute_pos_embed=dict(decay_mult=0.0),
-            relative_position_bias_table=dict(decay_mult=0.0),
-            norm=dict(decay_mult=0.0))))
+optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
     warmup='linear',
-    warmup_iters=50,
+    warmup_iters=500,
     warmup_ratio=0.001,
-    step=[5, 10])
-runner = dict(type='EpochBasedRunner', max_epochs=15)
+    step=[5, 15])
+runner = dict(type='EpochBasedRunner', max_epochs=25)
 checkpoint_config = dict(interval=999999)
 log_config = dict(interval=1, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-load_from = 'F:\source\repos\InferenceDL\Erithro\best_bbox_mAP_epoch_2.pth'
+load_from = 'F:\source\repos\InferenceDL\Exp\best_bbox_mAP_epoch_2.pth'
 resume_from = None
 workflow = [('train', 1)]
 opencv_num_threads = 0
 mp_start_method = 'fork'
 auto_scale_lr = dict(enable=False, base_batch_size=16)
-pretrained = 'https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth'
 seed = 1234
 gpu_ids = [0]
 work_dir = 'F:\source\repos\InferenceDL\Exp'
-max_epochs = 15
-total_epochs = 15
+max_epochs = 25
+total_epochs = 25
 device = 'cuda'

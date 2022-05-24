@@ -69,7 +69,7 @@ class BaseTrainer(ABC):
         self.cfg.max_epochs = epochs
         self.cfg.runner.max_epochs = epochs # Epochs for the runner that runs the workflow 
         self.cfg.total_epochs = epochs
-
+        self.cfg.device ='cuda'
 
         # self.model = None
         self.custom_data = custom_data
@@ -120,6 +120,7 @@ class MMSegTrainer(BaseTrainer):
                 add_key(self.cfg.model.test_cfg.rcnn, "iou_threshold", "class_agnostic", True)
             except:
                 pass
+        
         self.cfg.evaluation['save_best'] = 'bbox_mAP'
         
         if img_scale is not None:
@@ -140,8 +141,7 @@ class MMSegTrainer(BaseTrainer):
         warmup_iters=500,
         warmup_ratio=0.001,
         step=[8, 11])
-    
-
+        
     def train(self, validate = True):
         self.model = build_detector(self.cfg.model,
                                     train_cfg=self.cfg.get("train_cfg"),
@@ -236,7 +236,8 @@ class MMDetTrainer(BaseTrainer):
         warmup_iters=500,
         warmup_ratio=0.001,
         step=[8, 11])
-    
+        #change_key(self.cfg.model.rpn_head.anchor_generator, "strides", [8,16,32,64,128])
+        #add_key(self.cfg.model.rpn_head.anchor_generator, "scales", "base_sizes", [2,4,8,16,32])
 
     def train(self, validate = True):
         self.model = build_detector(self.cfg.model,

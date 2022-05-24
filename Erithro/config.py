@@ -151,7 +151,7 @@ model = dict(
             max_per_img=800,
             mask_thr_binary=0.5)))
 dataset_type = 'CocoDataset'
-data_root = 'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset'
+data_root = 'D:\Hsa\temp\projects\8e51d9d2-3b8c-4262-a49e-c17fc58174a6\dataset'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -229,9 +229,9 @@ data = dict(
     train=dict(
         type='CocoDataset',
         ann_file=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\annotations/instances_train2017.json',
+        'D:\Hsa\temp\projects\8e51d9d2-3b8c-4262-a49e-c17fc58174a6\dataset\annotations/instances_train2017.json',
         img_prefix=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\train2017/',
+        'D:\Hsa\temp\projects\8e51d9d2-3b8c-4262-a49e-c17fc58174a6\dataset\train2017/',
         classes=('0', ),
         pipeline=[
             dict(type='LoadImageFromFile'),
@@ -292,9 +292,9 @@ data = dict(
     val=dict(
         type='CocoDataset',
         ann_file=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\annotations/instances_val2017.json',
+        'D:\Hsa\temp\projects\8e51d9d2-3b8c-4262-a49e-c17fc58174a6\dataset\annotations/instances_val2017.json',
         img_prefix=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\val2017/',
+        'D:\Hsa\temp\projects\8e51d9d2-3b8c-4262-a49e-c17fc58174a6\dataset\val2017/',
         classes=('0', ),
         pipeline=[
             dict(type='LoadImageFromFile'),
@@ -318,9 +318,9 @@ data = dict(
     test=dict(
         type='CocoDataset',
         ann_file=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\annotations/instances_val2017.json',
+        'D:\Hsa\temp\projects\8e51d9d2-3b8c-4262-a49e-c17fc58174a6\dataset\annotations/instances_val2017.json',
         img_prefix=
-        'D:\Hsa\temp\projects\34450753-b808-492c-b16a-1de6be54fc40\dataset\val2017/',
+        'D:\Hsa\temp\projects\8e51d9d2-3b8c-4262-a49e-c17fc58174a6\dataset\val2017/',
         classes=('0', ),
         pipeline=[
             dict(type='LoadImageFromFile'),
@@ -358,14 +358,14 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=50,
     warmup_ratio=0.001,
-    step=[5, 10])
-runner = dict(type='EpochBasedRunner', max_epochs=15)
+    step=[4, 7])
+runner = dict(type='EpochBasedRunner', max_epochs=10)
 checkpoint_config = dict(interval=999999)
 log_config = dict(interval=1, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-load_from = 'F:\source\repos\InferenceDL\Erithro\best_bbox_mAP_epoch_2.pth'
+load_from = 'F:\source\repos\InferenceDL\Erithro\best_bbox_mAP_epoch_15.pth'
 resume_from = None
 workflow = [('train', 1)]
 opencv_num_threads = 0
@@ -375,6 +375,6 @@ pretrained = 'https://github.com/SwinTransformer/storage/releases/download/v1.0.
 seed = 1234
 gpu_ids = [0]
 work_dir = 'F:\source\repos\InferenceDL\Exp'
-max_epochs = 15
-total_epochs = 15
+max_epochs = 10
+total_epochs = 10
 device = 'cuda'
