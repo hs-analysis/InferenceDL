@@ -6,7 +6,7 @@ from mmdet.apis.inference import init_detector, inference_detector
 class InferenceModel:
     """A wrapper around the mmdet inference api
     """
-    def __init__(self, config, checkpoint, device = "cuda:0", cfg_options=None):
+    def __init__(self, config, checkpoint, device = 'cuda:0' if torch.cuda.is_available() else 'cpu', cfg_options=None):
         """Initializes the InferenceModel
 
         Args:

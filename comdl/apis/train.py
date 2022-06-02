@@ -69,7 +69,7 @@ class BaseTrainer(ABC):
         self.cfg.max_epochs = epochs
         self.cfg.runner.max_epochs = epochs # Epochs for the runner that runs the workflow 
         self.cfg.total_epochs = epochs
-        self.cfg.device ='cuda'
+        self.cfg.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         # self.model = None
         self.custom_data = custom_data
