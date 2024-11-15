@@ -81,7 +81,13 @@ trainer.train()
 ```
 
 ### Inference
-
+First load the model:
+```python
+from comdl.apis.inference import InferenceModel
+config_file = r"F:\source\repos\InferenceDL\Exp\config.py"
+checkpoint_file = r"F:\source\repos\InferenceDL\Exp\best_bbox_mAP_epoch_36.pth"
+model = InferenceModel(config_file, checkpoint_file)
+```
 Follow the implementation in HSA KIT:
 
 #### Object Detection
